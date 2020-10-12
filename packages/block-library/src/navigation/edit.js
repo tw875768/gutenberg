@@ -14,7 +14,7 @@ import {
 	Platform,
 } from '@wordpress/element';
 import {
-	__experimentalUseInnerBlocksProps as useInnerBlocksProps,
+	useInnerBlocksProps,
 	InspectorControls,
 	JustifyToolbar,
 	BlockControls,
