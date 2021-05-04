@@ -11,9 +11,11 @@ import {
 	useBlockProps,
 	store as blockEditorStore,
 	getColorClassName,
+	InspectorControls,
 } from '@wordpress/block-editor';
 import ServerSideRender from '@wordpress/server-side-render';
-import { ToolbarButton } from '@wordpress/components';
+import { PanelBody, ToggleControl, ToolbarButton } from '@wordpress/components';
+import { store as editorStore } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
@@ -86,7 +88,7 @@ export default function PageListEdit( {
 		style: { ...style?.color },
 	} );
 
-	const isParentNavigation = useSelect(
+	const isParentBlockNavigation = useSelect(
 		( select ) => {
 			const { getBlockParentsByBlockName } = select( blockEditorStore );
 			return (
@@ -97,16 +99,23 @@ export default function PageListEdit( {
 		[ clientId ]
 	);
 
+	const showChildPageToggle = useSelect( ( select ) => {
+		const { getCurrentPostType } = select( editorStore );
+		const currentPostType = getCurrentPostType();
+		const allowedTypes = [ 'page', 'wp_template' ];
+		return allowedTypes.includes( currentPostType );
+	} );
+
 	useEffect( () => {
 		setAttributes( {
-			isNavigationChild: isParentNavigation,
+			isNavigationChild: isParentBlockNavigation,
 			openSubmenusOnClick: !! context.openSubmenusOnClick,
 			showSubmenuIcon: !! context.showSubmenuIcon,
 		} );
 	}, [ context.openSubmenusOnClick, context.showSubmenuIcon ] );
 
 	useEffect( () => {
-		if ( isParentNavigation ) {
+		if ( isParentBlockNavigation ) {
 			apiFetch( {
 				path: addQueryArgs( '/wp/v2/pages', {
 					per_page: 1,
@@ -121,22 +130,38 @@ export default function PageListEdit( {
 		} else {
 			setAllowConvertToLinks( false );
 		}
-	}, [ isParentNavigation ] );
+	}, [ isParentBlockNavigation ] );
 
 	const [ isOpen, setOpen ] = useState( false );
 	const openModal = () => setOpen( true );
 	const closeModal = () => setOpen( false );
 
 	// Update parent status before component first renders.
-	const attributesWithParentStatus = {
+	const attributesWithParentBlockStatus = {
 		...attributes,
-		isNavigationChild: isParentNavigation,
+		isNavigationChild: isParentBlockNavigation,
 		openSubmenusOnClick: !! context.openSubmenusOnClick,
 		showSubmenuIcon: !! context.showSubmenuIcon,
 	};
 
 	return (
 		<>
+			<InspectorControls>
+				{ showChildPageToggle && (
+					<PanelBody>
+						<ToggleControl
+							label={ __( 'List child pages' ) }
+							checked={ !! attributes.showOnlyChildPages }
+							onChange={ () =>
+								setAttributes( {
+									showOnlyChildPages: ! attributes.showOnlyChildPages,
+								} )
+							}
+							help={ __( 'Uses parent to list child pages.' ) }
+						/>
+					</PanelBody>
+				) }
+			</InspectorControls>
 			{ allowConvertToLinks && (
 				<BlockControls group="other">
 					<ToolbarButton title={ __( 'Edit' ) } onClick={ openModal }>
@@ -153,7 +178,7 @@ export default function PageListEdit( {
 			<div { ...blockProps }>
 				<ServerSideRender
 					block="core/page-list"
-					attributes={ attributesWithParentStatus }
+					attributes={ attributesWithParentBlockStatus }
 				/>
 			</div>
 		</>

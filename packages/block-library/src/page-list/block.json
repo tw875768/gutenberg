@@ -3,7 +3,7 @@
 	"name": "core/page-list",
 	"title": "Page List",
 	"category": "widgets",
-	"description": "Display a list of all pages.",
+	"description": "Display a list of pages.",
 	"keywords": [ "menu", "navigation" ],
 	"textdomain": "default",
 	"attributes": {
@@ -38,6 +38,9 @@
 			"type": "boolean"
 		},
 		"openSubmenusOnClick" : {
+			"type": "boolean"
+		},
+		"showOnlyChildPages": {
 			"type": "boolean"
 		}
 	},
