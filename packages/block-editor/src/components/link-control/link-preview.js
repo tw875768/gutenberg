@@ -70,7 +70,10 @@ export default function LinkPreview( {
 							className="block-editor-link-control__search-item-title"
 							href={ value.url }
 						>
-							{ richData?.title || value?.title || displayURL }
+							{ richData?.title ||
+								value?.text ||
+								value?.title ||
+								displayURL }
 						</ExternalLink>
 						{ value?.url && (
 							<span className="block-editor-link-control__search-item-info">

@@ -228,21 +228,32 @@ export const updateNavigationLinkBlockAttributes = (
 	const {
 		title = '',
 		url = '',
+		text = '',
 		opensInNewTab,
 		id,
 		kind: newKind = originalKind,
 		type: newType = originalType,
 	} = updatedValue;
-
 	const normalizedTitle = title.replace( /http(s?):\/\//gi, '' );
 	const normalizedURL = url.replace( /http(s?):\/\//gi, '' );
 	const escapeTitle =
 		title !== '' &&
 		normalizedTitle !== normalizedURL &&
 		originalLabel !== title;
-	const label = escapeTitle
-		? escape( title )
-		: originalLabel || escape( normalizedURL );
+
+	let label;
+
+	if ( text ) {
+		label = text;
+	} else if ( text === '' ) {
+		// If the user deliberately cleared out the link text
+		// then reset to default to the URL.
+		label = escape( normalizedURL );
+	} else {
+		label = escapeTitle
+			? escape( title )
+			: originalLabel || escape( normalizedURL );
+	}
 
 	// In https://github.com/WordPress/gutenberg/pull/24670 we decided to use "tag" in favor of "post_tag"
 	const type = newType === 'post_tag' ? 'tag' : newType.replace( '-', '_' );
@@ -285,10 +296,13 @@ export default function NavigationLinkEdit( {
 		title,
 		kind,
 	} = attributes;
+
 	const link = {
 		url,
 		opensInNewTab,
+		text: label,
 	};
+
 	const { showSubmenuIcon } = context;
 	const { saveEntityRecord } = useDispatch( coreStore );
 	const {
@@ -687,6 +701,7 @@ export default function NavigationLinkEdit( {
 							anchorRef={ listItemRef.current }
 						>
 							<LinkControl
+								hasTextControl
 								className="wp-block-navigation-link__inline-link-input"
 								value={ link }
 								showInitialSuggestions={ true }
