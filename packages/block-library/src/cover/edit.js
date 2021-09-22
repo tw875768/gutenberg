@@ -274,29 +274,32 @@ function CoverPlaceholder( {
 	noticeUI,
 	noticeOperations,
 	onSelectMedia,
+	style,
 } ) {
 	const { removeAllNotices, createErrorNotice } = noticeOperations;
 	return (
-		<MediaPlaceholder
-			icon={ <BlockIcon icon={ icon } /> }
-			labels={ {
-				title: __( 'Cover' ),
-				instructions: __(
-					'Upload an image or video file, or pick one from your media library.'
-				),
-			} }
-			onSelect={ onSelectMedia }
-			accept="image/*,video/*"
-			allowedTypes={ ALLOWED_MEDIA_TYPES }
-			notices={ noticeUI }
-			disableMediaButtons={ disableMediaButtons }
-			onError={ ( message ) => {
-				removeAllNotices();
-				createErrorNotice( message );
-			} }
-		>
-			{ children }
-		</MediaPlaceholder>
+		<div className="cover-block__cover-placeholder-container" style={ style }>
+			<MediaPlaceholder
+				icon={ <BlockIcon icon={ icon } /> }
+				labels={ {
+					title: __( 'Cover' ),
+					instructions: __(
+						'Upload an image or video file, or pick one from your media library.'
+					),
+				} }
+				onSelect={ onSelectMedia }
+				accept="image/*,video/*"
+				allowedTypes={ ALLOWED_MEDIA_TYPES }
+				notices={ noticeUI }
+				disableMediaButtons={ disableMediaButtons }
+				onError={ ( message ) => {
+					removeAllNotices();
+					createErrorNotice( message );
+				} }
+			>
+				{ children }
+			</MediaPlaceholder>
+		</div>
 	);
 }
 
@@ -632,10 +635,25 @@ function CoverEdit( {
 						blockProps.className
 					) }
 				>
+					<ResizableCover
+						className="block-library-cover__resize-container"
+						onResizeStart={ () => {
+							setAttributes( { minHeightUnit: 'px' } );
+							toggleSelection( false );
+						} }
+						onResize={ setTemporaryMinHeight }
+						onResizeStop={ ( newMinHeight ) => {
+							toggleSelection( true );
+							setAttributes( { minHeight: newMinHeight } );
+							setTemporaryMinHeight( null );
+						} }
+						showHandle={ isSelected }
+					/>
 					<CoverPlaceholder
 						noticeUI={ noticeUI }
 						onSelectMedia={ onSelectMedia }
 						noticeOperations={ noticeOperations }
+						style={ { minHeight: temporaryMinHeight || minHeight } }
 					>
 						<div className="wp-block-cover__placeholder-background-options">
 							<ColorPalette
