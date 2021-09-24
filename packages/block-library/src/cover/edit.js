@@ -278,13 +278,16 @@ function CoverPlaceholder( {
 } ) {
 	const { removeAllNotices, createErrorNotice } = noticeOperations;
 	return (
-		<div className="cover-block__cover-placeholder-container" style={ style }>
+		<div
+			className="cover-block__cover-placeholder-container"
+			style={ style }
+		>
 			<MediaPlaceholder
 				icon={ <BlockIcon icon={ icon } /> }
 				labels={ {
 					title: __( 'Cover' ),
 					instructions: __(
-						'Upload an image or video file, or pick one from your media library.'
+						'Upload an image or video file, or pick one from your media library. Resize this panel to set a minimum height.'
 					),
 				} }
 				onSelect={ onSelectMedia }
