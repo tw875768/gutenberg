@@ -91,6 +91,14 @@
 			"__experimentalTextDecoration": true
 		}
 	},
+	"styles": [
+		{
+		  "name": "dropdown",
+		  "label": "Dropdown",
+		  "isDefault": true
+		},
+		{ "name": "accordion", "label": "Accordion" }
+	],
 	"viewScript": "file:./view.min.js",
 	"editorStyle": "wp-block-navigation-editor",
 	"style": "wp-block-navigation"

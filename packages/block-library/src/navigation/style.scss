@@ -140,36 +140,6 @@
 		a {
 			margin: 0;
 		}
-
-		// Submenu indentation when there's no background.
-		left: -1em;
-		top: 100%;
-
-		// Indentation for all submenus.
-		// Nested submenus sit to the left on large breakpoints.
-		// On smaller breakpoints, they open vertically, accordion-style.
-		@include break-medium {
-			.wp-block-navigation__submenu-container {
-				left: 100%;
-				top: -1px; // Border width.
-
-				// Prevent the menu from disappearing when the mouse is over the gap
-				&::before {
-					content: "";
-					position: absolute;
-					right: 100%;
-					height: 100%;
-					display: block;
-					width: 0.5em;
-					background: transparent;
-				}
-			}
-
-			// Reset the submenu indicator for horizontal flyouts.
-			.wp-block-navigation__submenu-icon svg {
-				transform: rotate(-90deg);
-			}
-		}
 	}
 
 	// Separating out hover and focus-within so hover works again on IE: https://davidwalsh.name/css-focus-within#comment-513401
@@ -201,6 +171,56 @@
 		width: auto;
 		height: auto;
 		min-width: 200px;
+	}
+}
+
+// Styles for dropdown style menu.
+.wp-block-navigation:where(.is-style-dropdown) .has-child,
+.wp-block-navigation:where(:not(.is-style-dropdown):not(.is-style-accordion)) .has-child {
+	:where(.wp-block-navigation__submenu-container) {
+		// Submenu indentation when there's no background.
+		left: -1em;
+		top: 100%;
+
+		// Indentation for all submenus.
+		// Nested submenus sit to the left on large breakpoints.
+		// On smaller breakpoints, they open vertically, accordion-style.
+		@include break-medium {
+			.wp-block-navigation__submenu-container {
+				left: 100%;
+				top: -1px; // Border width.
+
+				// Prevent the menu from disappearing when the mouse is over the gap
+				&::before {
+					content: "";
+					position: absolute;
+					right: 100%;
+					height: 100%;
+					display: block;
+					width: 0.5em;
+					background: transparent;
+				}
+			}
+
+			// Reset the submenu indicator for horizontal flyouts.
+			.wp-block-navigation__submenu-icon svg {
+				transform: rotate(-90deg);
+			}
+		}
+	}
+}
+
+// Styles for submenu accordion.
+// These are separated out with reduced specificity to allow better inheritance from Global Styles.
+.wp-block-navigation:where(.is-style-accordion) .has-child {
+	display: block;
+	margin: $grid-unit-10 0;
+
+	// We use :where to keep specificity minimal, yet still scope it to only the navigation block.
+	// That way if padding is set in theme.json, it still wins.
+	// https://css-tricks.com/almanac/selectors/w/where/
+	:where(.wp-block-navigation__submenu-container) {
+		position: relative;
 	}
 }
 
