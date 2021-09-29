@@ -10,6 +10,8 @@ For each user feature we should also add a importance categorization label  to i
 -->
 
 ## Unreleased
+-   [**] Block inserter indicates newly available block types [#35201]
+-   [**] Block editor support articles available within the block editor help menu [#35201]
 
 ## 1.62.0
 -   [**] [Embed block] Implement WP embed preview component [#34004]
