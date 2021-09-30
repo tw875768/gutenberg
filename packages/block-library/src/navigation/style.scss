@@ -175,8 +175,7 @@
 }
 
 // Styles for dropdown style menu.
-.wp-block-navigation:where(.is-style-dropdown) .has-child,
-.wp-block-navigation:where(:not(.is-style-dropdown):not(.is-style-accordion)) .has-child {
+.wp-block-navigation:where(:not(.is-accordion)) .has-child {
 	:where(.wp-block-navigation__submenu-container) {
 		// Submenu indentation when there's no background.
 		left: -1em;
@@ -212,7 +211,7 @@
 
 // Styles for submenu accordion.
 // These are separated out with reduced specificity to allow better inheritance from Global Styles.
-.wp-block-navigation:where(.is-style-accordion) .has-child {
+.wp-block-navigation:where(.is-accordion) .has-child {
 	display: block;
 	margin: $grid-unit-10 0;
 

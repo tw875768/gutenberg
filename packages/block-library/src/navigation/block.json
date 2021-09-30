@@ -36,6 +36,10 @@
 			"type": "boolean",
 			"default": true
 		},
+		"expandEffect":{
+			"type": "string",
+			"default": "dropdown"
+		},
 		"openSubmenusOnClick":{
 			"type": "boolean",
 			"default": false
@@ -91,14 +95,6 @@
 			"__experimentalTextDecoration": true
 		}
 	},
-	"styles": [
-		{
-		  "name": "dropdown",
-		  "label": "Dropdown",
-		  "isDefault": true
-		},
-		{ "name": "accordion", "label": "Accordion" }
-	],
 	"viewScript": "file:./view.min.js",
 	"editorStyle": "wp-block-navigation-editor",
 	"style": "wp-block-navigation"
