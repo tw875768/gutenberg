@@ -46,6 +46,7 @@ export default function ListViewBlock( {
 	path,
 	isExpanded,
 	style,
+	isFocused = false,
 } ) {
 	const cellRef = useRef( null );
 	const [ isHovered, setIsHovered ] = useState( false );
@@ -83,9 +84,10 @@ export default function ListViewBlock( {
 	// try to steal the focus from the editor canvas.
 	useEffect( () => {
 		if (
-			withExperimentalPersistentListViewFeatures &&
-			! isTreeGridMounted &&
-			isSelected
+			( withExperimentalPersistentListViewFeatures &&
+				! isTreeGridMounted &&
+				isSelected ) ||
+			isFocused
 		) {
 			cellRef.current.focus();
 		}
