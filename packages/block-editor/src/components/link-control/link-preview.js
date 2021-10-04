@@ -14,6 +14,7 @@ import {
 } from '@wordpress/components';
 import { filterURLForDisplay, safeDecodeURI } from '@wordpress/url';
 import { Icon, globe } from '@wordpress/icons';
+import { __unstableStripHTML as stripHTML } from '@wordpress/dom';
 
 /**
  * Internal dependencies
@@ -38,6 +39,9 @@ export default function LinkPreview( {
 	const displayURL =
 		( value && filterURLForDisplay( safeDecodeURI( value.url ), 16 ) ) ||
 		'';
+
+	const displayTitle =
+		richData?.title || value?.text || value?.title || displayURL;
 	return (
 		<div
 			aria-label={ __( 'Currently selected' ) }
@@ -70,10 +74,7 @@ export default function LinkPreview( {
 							className="block-editor-link-control__search-item-title"
 							href={ value.url }
 						>
-							{ richData?.title ||
-								value?.text ||
-								value?.title ||
-								displayURL }
+							{ stripHTML( displayTitle ) }
 						</ExternalLink>
 						{ value?.url && (
 							<span className="block-editor-link-control__search-item-info">
